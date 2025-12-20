@@ -12,6 +12,13 @@ type order struct {
 	createdAt time.Time // nano second precision
 }
 
+type customer struct {
+	name   string
+	age    int
+	email  string
+	orders []order
+}
+
 func newOrder(id string, amount float32) *order {
 	return &order{
 		id:     id,
@@ -64,4 +71,18 @@ func main() {
 	}
 
 	fmt.Println(userDetails)
+
+	customer1 := customer{
+		name:  "Bob",
+		age:   30,
+		email: "bob@gmail.com",
+		orders: []order{
+			*myOrder3,
+		},
+	}
+
+	customer1.orders = append(customer1.orders, myOrder)
+	customer1.orders[0].createdAt = time.Now()
+	fmt.Println(customer1)
+	customer1.orders[0].printOrder()
 }
