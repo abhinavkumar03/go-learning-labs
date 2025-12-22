@@ -19,8 +19,8 @@ func changeOrderStatus(status orderStatus) {
 
 const (
 	NotStarted cookingStatus = "Not Started"
-	InProgress               = "In Progress"
-	Completed                = "Completed"
+	InProgress cookingStatus = "In Progress"
+	Completed  cookingStatus = "Completed"
 )
 
 func changeCookingStatus(status cookingStatus) {
