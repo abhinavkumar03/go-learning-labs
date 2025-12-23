@@ -2,11 +2,16 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"sync"
 )
 
 func task(id int) {
 	fmt.Println("Doing task: ", id)
+}
+
+func wgtask(id int, w *sync.WaitGroup) {
+	defer w.Done() // will run at last of function execution
+	fmt.Println("wait task: ", id)
 }
 
 func main() {
@@ -22,6 +27,16 @@ func main() {
 		}(j)
 	}
 
-	time.Sleep(2 * time.Second)
+	// time.Sleep(2 * time.Second)
+
+	var wg sync.WaitGroup
+
+	// wait for goroutines to finish
+	for k := 0; k < 5; k++ {
+		wg.Add(1)
+		go wgtask(k, &wg)
+	}
+
+	wg.Wait()
 
 }
