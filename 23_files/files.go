@@ -1,13 +1,14 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 )
 
 func main() {
 
-	newFile, err := os.Create("./23_files/example.txt")
+	newFile, err := os.Create("./23_files/example1.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -18,7 +19,7 @@ func main() {
 	bytes := []byte(" how are you?")
 	newFile.Write(bytes)
 
-	f, err := os.Open("./23_files/example.txt")
+	f, err := os.Open("./23_files/example2.txt")
 	if err != nil {
 		// log the error
 		panic(err)
@@ -52,7 +53,7 @@ func main() {
 
 	fmt.Println()
 
-	data, err := os.ReadFile("./23_files/example.txt") // not a viable solution for large file
+	data, err := os.ReadFile("./23_files/example1.txt") // not a viable solution for large file
 	if err != nil {
 		panic(err)
 	}
@@ -74,4 +75,38 @@ func main() {
 		fmt.Println("file name: ", fi.Name(), "directory name: ", fi.IsDir())
 	}
 
+	// read and write to another file (streaming fashion)
+	sourceFile, err := os.Open("./23_files/example1.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer sourceFile.Close()
+
+	DestFile, err := os.Create("./23_files/example3.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer DestFile.Close()
+
+	reader := bufio.NewReader(sourceFile)
+	writer := bufio.NewWriter(DestFile)
+
+	for {
+		b, err := reader.ReadByte()
+		if err != nil {
+			if err.Error() != "EOF" {
+				panic(err)
+			}
+			break
+		}
+
+		e := writer.WriteByte(b)
+		if e != nil {
+			panic(e)
+		}
+	}
+
+	writer.Flush()
+
+	fmt.Println("Written To new file successfully")
 }
