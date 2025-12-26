@@ -109,4 +109,12 @@ func main() {
 	writer.Flush()
 
 	fmt.Println("Written To new file successfully")
+
+	// Delete a file
+	er := os.Remove("./23_files/test.txt")
+	if er != nil {
+		panic(er)
+	}
+
+	fmt.Println("file deleted successfully")
 }
